@@ -66,7 +66,25 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     // --------------------------------------------------------
-    // SUPERVISOR PDAM
+    // SUPERVISOR & ADMIN — SHARED FEATURES
+    // Role: supervisor, admin
+    // Fitur laporan, filter, kinerja accessible oleh kedua role
+    // --------------------------------------------------------
+    Route::middleware('role:admin,supervisor')->prefix('reports')->name('reports.')->group(function () {
+        // PBI-13 | IMANUEL — Filter & pencarian pengaduan (shared)
+        Route::get('/filter', [Supervisor\FilterPengaduanController::class, 'index'])->name('filter.index');
+
+        // PBI-14 | IMANUEL — Laporan rekap + export PDF (shared)
+        Route::get('/laporan', [Supervisor\LaporanController::class, 'index'])->name('laporan.index');
+        Route::get('/laporan/export-pdf', [Supervisor\LaporanController::class, 'exportPdf'])->name('laporan.export-pdf');
+
+        // PBI-18 | FARISHA — Laporan kinerja petugas + export Excel (shared)
+        Route::get('/kinerja', [Admin\LaporanKinerjaController::class, 'index'])->name('kinerja.index');
+        Route::get('/kinerja/export-excel', [Admin\LaporanKinerjaController::class, 'exportExcel'])->name('kinerja.export-excel');
+    });
+
+    // --------------------------------------------------------
+    // SUPERVISOR PDAM (ONLY)
     // Role: supervisor
     // --------------------------------------------------------
     Route::middleware('role:supervisor')->prefix('supervisor')->name('supervisor.')->group(function () {
@@ -79,17 +97,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // PBI-06 | SANITRA — Assignment petugas
         Route::get('assignment/{pengaduan}/create', [Supervisor\AssignmentController::class, 'create'])->name('assignment.create');
         Route::post('assignment/{pengaduan}', [Supervisor\AssignmentController::class, 'store'])->name('assignment.store');
-
-        // PBI-13 | IMANUEL — Filter & pencarian pengaduan
-        Route::get('/filter', [Supervisor\FilterPengaduanController::class, 'index'])->name('filter.index');
-
-        // PBI-14 | IMANUEL — Laporan rekap + export PDF
-        Route::get('/laporan', [Supervisor\LaporanController::class, 'index'])->name('laporan.index');
-        Route::get('/laporan/export-pdf', [Supervisor\LaporanController::class, 'exportPdf'])->name('laporan.export-pdf');
-
-        // PBI-18 | FARISHA — Laporan kinerja petugas + export Excel
-        Route::get('/kinerja', [Admin\LaporanKinerjaController::class, 'index'])->name('kinerja.index');
-        Route::get('/kinerja/export-excel', [Admin\LaporanKinerjaController::class, 'exportExcel'])->name('kinerja.export-excel');
     });
 
     // --------------------------------------------------------
