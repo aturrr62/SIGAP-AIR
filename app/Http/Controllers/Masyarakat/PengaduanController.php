@@ -8,13 +8,13 @@
  * - Auto-generate nomor tiket unik (SIGAP-YYYYMMDD-XXXX)
  * - Auto-set SLA berdasarkan kategori yang dipilih
  */
+
 namespace App\Http\Controllers\Masyarakat;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Pengaduan\StorePengaduanRequest;
-use App\Models\{Pengaduan, Kategori, Zona, Sla};
+use App\Models\{Pengaduan, Kategori, Zona};
 use App\Services\PengaduanService;
-use Illuminate\Support\Facades\Storage;
 
 class PengaduanController extends Controller
 {
@@ -24,14 +24,26 @@ class PengaduanController extends Controller
     {
         $kategoris = Kategori::where('is_active', true)->get();
         $zonas     = Zona::where('is_active', true)->get();
+
         return view('masyarakat.pengaduan.create', compact('kategoris', 'zonas'));
     }
 
+    // ✅ Halaman sukses setelah submit
+    public function sukses(Pengaduan $pengaduan)
+    {
+        abort_unless($pengaduan->user_id === auth()->id(), 403);
+
+        return view('masyarakat.pengaduan.tiket-sukses', compact('pengaduan'));
+    }
+
+    // ✅ Simpan pengaduan
     public function store(StorePengaduanRequest $request)
     {
-        // TODO SANITRA: Delegasikan ke PengaduanService
-        $pengaduan = $this->pengaduanService->buat($request->validated(), auth()->user());
-        return redirect()->route('masyarakat.riwayat.show', $pengaduan)
-                         ->with('success', "Pengaduan berhasil dikirim! Nomor tiket: {$pengaduan->nomor_tiket}");
+        $pengaduan = $this->pengaduanService->buat(
+            $request->validated(),
+            auth()->user()
+        );
+
+        return redirect()->route('masyarakat.pengaduan.sukses', $pengaduan);
     }
 }

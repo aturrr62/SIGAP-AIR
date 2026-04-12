@@ -31,12 +31,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // --------------------------------------------------------
     // MASYARAKAT / PELAPOR
-    // Role: masyarakat
     // --------------------------------------------------------
     Route::middleware('role:masyarakat')->prefix('masyarakat')->name('masyarakat.')->group(function () {
         Route::get('/dashboard', [Masyarakat\DashboardController::class, 'index'])->name('dashboard');
 
         // PBI-04 | SANITRA — Pengajuan pengaduan baru
+        Route::get('pengaduan/{pengaduan}/sukses', [Masyarakat\PengaduanController::class, 'sukses'])->name('pengaduan.sukses');
         Route::resource('pengaduan', Masyarakat\PengaduanController::class)->only(['create', 'store']);
 
         // PBI-10 | AMANDA — Riwayat pengaduan
@@ -52,77 +52,60 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // --------------------------------------------------------
     // PETUGAS TEKNIS
-    // Role: petugas
     // --------------------------------------------------------
     Route::middleware('role:petugas')->prefix('petugas')->name('petugas.')->group(function () {
         Route::get('/dashboard', [Petugas\DashboardController::class, 'index'])->name('dashboard');
 
-        // PBI-07 | FALAH — Update status penanganan + upload foto
+        // PBI-07 | FALAH
         Route::resource('tugas', Petugas\PenangananController::class)->only(['index', 'show', 'update']);
 
-        // PBI-08 | FALAH — Manajemen profil
+        // PBI-08 | FALAH
         Route::get('/profil/edit', [Petugas\ProfilController::class, 'edit'])->name('profil.edit');
         Route::patch('/profil', [Petugas\ProfilController::class, 'update'])->name('profil.update');
     });
 
     // --------------------------------------------------------
-    // SUPERVISOR & ADMIN — SHARED FEATURES
-    // Role: supervisor, admin
-    // Fitur laporan, filter, kinerja accessible oleh kedua role
+    // SUPERVISOR & ADMIN (SHARED)
     // --------------------------------------------------------
     Route::middleware('role:admin,supervisor')->prefix('reports')->name('reports.')->group(function () {
-        // PBI-13 | IMANUEL — Filter & pencarian pengaduan (shared)
         Route::get('/filter', [Supervisor\FilterPengaduanController::class, 'index'])->name('filter.index');
 
-        // PBI-14 | IMANUEL — Laporan rekap + export PDF (shared)
         Route::get('/laporan', [Supervisor\LaporanController::class, 'index'])->name('laporan.index');
         Route::get('/laporan/export-pdf', [Supervisor\LaporanController::class, 'exportPdf'])->name('laporan.export-pdf');
 
-        // PBI-18 | FARISHA — Laporan kinerja petugas + export Excel (shared)
         Route::get('/kinerja', [Admin\LaporanKinerjaController::class, 'index'])->name('kinerja.index');
         Route::get('/kinerja/export-excel', [Admin\LaporanKinerjaController::class, 'exportExcel'])->name('kinerja.export-excel');
     });
 
     // --------------------------------------------------------
-    // SUPERVISOR PDAM (ONLY)
-    // Role: supervisor
+    // SUPERVISOR
     // --------------------------------------------------------
     Route::middleware('role:supervisor')->prefix('supervisor')->name('supervisor.')->group(function () {
-        // PBI-15 | IMANUEL — Dashboard statistik
         Route::get('/dashboard', [Supervisor\DashboardController::class, 'index'])->name('dashboard');
 
-        // PBI-05 | SANITRA — Verifikasi pengaduan
+        // PBI-05 | SANITRA
         Route::resource('verifikasi', Supervisor\VerifikasiController::class)->only(['index', 'show', 'update']);
 
-        // PBI-06 | SANITRA — Assignment petugas
+        // PBI-06 | SANITRA
         Route::get('assignment/{pengaduan}/create', [Supervisor\AssignmentController::class, 'create'])->name('assignment.create');
         Route::post('assignment/{pengaduan}', [Supervisor\AssignmentController::class, 'store'])->name('assignment.store');
     });
 
     // --------------------------------------------------------
-    // ADMIN SISTEM
-    // Role: admin
+    // ADMIN
     // --------------------------------------------------------
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [Admin\DashboardController::class, 'index'])->name('dashboard');
 
-        // PBI-01 | ARTHUR — CRUD data pelanggan PDAM
         Route::resource('pelanggan', Admin\PelangganController::class);
-
-        // PBI-02 | ARTHUR — CRUD kategori + SLA
         Route::resource('kategori', Admin\KategoriController::class);
-
-        // PBI-03 | ARTHUR — CRUD zona wilayah + mapping petugas
         Route::resource('zona', Admin\ZonaController::class);
 
-        // PBI-09 | FALAH — Konfigurasi SLA
         Route::resource('sla', Petugas\SlaController::class)->only(['index', 'edit', 'update']);
 
-        // PBI-16 | FARISHA — Manajemen user + role
         Route::resource('user', Admin\UserController::class);
         Route::post('user/{user}/reset-password', [Admin\UserController::class, 'resetPassword'])->name('user.reset-password');
 
-        // PBI-17 | FARISHA — Manajemen petugas teknis
         Route::resource('petugas', Admin\PetugasController::class);
     });
 

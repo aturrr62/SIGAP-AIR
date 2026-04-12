@@ -1,8 +1,8 @@
-<nav class="bg-blue-800 text-white h-16 flex items-center justify-between px-6 shadow-lg fixed top-0 left-0 right-0 z-50">
+<nav class="bg-brand text-white h-16 flex items-center justify-between px-6 shadow-lg fixed top-0 left-0 right-0 z-50">
     {{-- Brand --}}
     <div class="flex items-center gap-3">
         <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center">
-            <span class="text-blue-800 font-black text-sm">💧</span>
+            <span class="text-brand font-black text-sm">💧</span>
         </div>
         <span class="font-bold text-lg tracking-tight">SIGAP-AIR</span>
     </div>
@@ -32,12 +32,12 @@
         <div class="flex items-center gap-2">
             <div class="text-right hidden sm:block">
                 <p class="text-sm font-semibold leading-none">{{ auth()->user()->name }}</p>
-                <p class="text-xs text-blue-200 capitalize">{{ auth()->user()->role }}</p>
+                <p class="text-xs text-white/80 capitalize">{{ auth()->user()->role }}</p>
             </div>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit"
-                    class="text-xs bg-blue-700 hover:bg-blue-600 px-3 py-1.5 rounded-lg transition">
+                    class="text-xs bg-brand-dark hover:opacity-90 px-3 py-1.5 rounded-lg transition">
                     Keluar
                 </button>
             </form>

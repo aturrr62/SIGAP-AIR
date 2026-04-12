@@ -5,12 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $title ?? 'SIGAP-AIR' }} — Sistem Informasi Pengaduan Air</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
-            theme: { extend: { colors: { brand: { DEFAULT: '#1e40af', dark: '#1e3a8a' } } } }
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            DEFAULT: '#3B82F6',
+                            dark: '#2563EB'
+                        }
+                    }
+                }
+            }
         }
     </script>
+
     @stack('styles')
 </head>
 <body class="bg-gray-100 font-sans">
@@ -33,5 +44,6 @@
     </div>
 
     @stack('scripts')
+
 </body>
 </html>
