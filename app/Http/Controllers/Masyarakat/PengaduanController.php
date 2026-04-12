@@ -8,6 +8,7 @@
  * - Auto-generate nomor tiket unik (SIGAP-YYYYMMDD-XXXX)
  * - Auto-set SLA berdasarkan kategori yang dipilih
  */
+
 namespace App\Http\Controllers\Masyarakat;
 
 use App\Http\Controllers\Controller;
@@ -23,9 +24,11 @@ class PengaduanController extends Controller
     {
         $kategoris = Kategori::where('is_active', true)->get();
         $zonas     = Zona::where('is_active', true)->get();
+
         return view('masyarakat.pengaduan.create', compact('kategoris', 'zonas'));
     }
 
+    // ✅ Halaman sukses setelah submit
     public function sukses(Pengaduan $pengaduan)
     {
         abort_unless($pengaduan->user_id === auth()->id(), 403);
@@ -33,9 +36,13 @@ class PengaduanController extends Controller
         return view('masyarakat.pengaduan.tiket-sukses', compact('pengaduan'));
     }
 
+    // ✅ Simpan pengaduan
     public function store(StorePengaduanRequest $request)
     {
-        $pengaduan = $this->pengaduanService->buat($request->validated(), auth()->user());
+        $pengaduan = $this->pengaduanService->buat(
+            $request->validated(),
+            auth()->user()
+        );
 
         return redirect()->route('masyarakat.pengaduan.sukses', $pengaduan);
     }

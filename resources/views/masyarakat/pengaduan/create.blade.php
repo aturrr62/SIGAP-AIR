@@ -1,7 +1,8 @@
-{{--
+{{-- 
     PBI-04 — Form Pengajuan Pengaduan
     TANGGUNG JAWAB: Sanitra Savitri
 --}}
+
 <x-masyarakat-form-layout title="Pengaduan Baru">
     <h1 class="mb-6 text-xl font-bold text-brand">Pengaduan Baru</h1>
 
