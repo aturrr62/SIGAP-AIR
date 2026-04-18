@@ -14,6 +14,8 @@ class Sla extends Model
 {
     use HasFactory;
 
+    protected $table = 'sla_pengaduan';
+
     protected $fillable = [
         'pengaduan_id',
         'deadline',         // Kapan harus selesai

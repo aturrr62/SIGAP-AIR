@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
 
 class Pelanggan extends Model
 {
     use HasFactory;
+
+    protected $table = 'pelanggan';
 
     protected $fillable = [
         'user_id',
@@ -24,39 +25,35 @@ class Pelanggan extends Model
         'is_active' => 'boolean',
     ];
 
+    public function zona()
+    {
+        return $this->belongsTo(ZonaWilayah::class, 'zona_id');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function zona()
-    {
-        // Adjusting ZonaWilayah request to match the likely existing Zona model
-        return $this->belongsTo(Zona::class, 'zona_id');
-    }
-
-    public function pengaduans()
+    public function pengaduan()
     {
         return $this->hasMany(Pengaduan::class, 'user_id', 'user_id');
     }
 
-    public function scopeFilter(Builder $query, array $filters)
+    public function scopeFilter($query, array $filters)
     {
-        $query->when($filters['zona_id'] ?? false, function ($query, $zona) {
-            $query->where('zona_id', $zona);
+        $query->when($filters['zona_id'] ?? false, function ($query, $zona_id) {
+            $query->where('zona_id', $zona_id);
         });
 
         $query->when(isset($filters['is_active']), function ($query) use ($filters) {
-            // allows '0' or '1' or actual booleans
-            if ($filters['is_active'] !== '') {
-                $query->where('is_active', $filters['is_active']);
-            }
+            $query->where('is_active', $filters['is_active']);
         });
 
         $query->when($filters['search'] ?? false, function ($query, $search) {
-            $query->where(function ($q) use ($search) {
-                $q->where('nama_pelanggan', 'like', '%' . $search . '%')
-                  ->orWhere('nomor_sambungan', 'like', '%' . $search . '%');
+            $query->where(function ($query) use ($search) {
+                $query->where('nama_pelanggan', 'like', "%{$search}%")
+                      ->orWhere('nomor_sambungan', 'like', "%{$search}%");
             });
         });
     }

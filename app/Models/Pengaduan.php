@@ -22,6 +22,8 @@ class Pengaduan extends Model
 {
     use HasFactory;
 
+    protected $table = 'pengaduan';
+
     protected $fillable = [
         'nomor_tiket',
         'user_id',

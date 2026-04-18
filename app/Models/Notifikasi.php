@@ -14,6 +14,8 @@ class Notifikasi extends Model
 {
     use HasFactory;
 
+    protected $table = 'notifikasi';
+
     protected $fillable = [
         'user_id',
         'pengaduan_id',
