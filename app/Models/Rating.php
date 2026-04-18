@@ -14,6 +14,8 @@ class Rating extends Model
 {
     use HasFactory;
 
+    protected $table = 'rating_feedback';
+
     protected $fillable = [
         'pengaduan_id',
         'user_id',

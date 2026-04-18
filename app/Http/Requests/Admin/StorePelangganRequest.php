@@ -8,16 +8,16 @@ class StorePelangganRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true; 
+        return true;
     }
 
     public function rules(): array
     {
         return [
-            'zona_id'         => ['required', 'exists:zonas,id'],
+            'zona_id'         => ['required', 'exists:zona_wilayah,id'],
             'nama_pelanggan'  => ['required', 'string', 'max:255'],
-            'alamat'          => ['required', 'string'],
-            'nomor_sambungan' => ['required', 'string', 'max:50', 'unique:pelanggans,nomor_sambungan'],
+            'alamat'          => ['required', 'string', 'max:1000'],
+            'nomor_sambungan' => ['required', 'string', 'max:50', 'unique:pelanggan,nomor_sambungan'],
             'no_telepon'      => ['nullable', 'string', 'max:20'],
             'is_active'       => ['boolean'],
         ];

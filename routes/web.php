@@ -55,7 +55,7 @@ Route::middleware('auth')->group(function () {
     // Role: Admin
     Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', function () {
-            return view('dashboard');
+            return view('admin.dashboard');
         })->name('dashboard');
         // PBI-01,02,03,09,16,17 routes here
         Route::resource('pelanggan', \App\Http\Controllers\Admin\PelangganController::class);

@@ -15,14 +15,14 @@ class UpdatePelangganRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'zona_id'         => ['required', 'exists:zonas,id'],
+            'zona_id'         => ['required', 'exists:zona_wilayah,id'],
             'nama_pelanggan'  => ['required', 'string', 'max:255'],
-            'alamat'          => ['required', 'string'],
+            'alamat'          => ['required', 'string', 'max:1000'],
             'nomor_sambungan' => [
                 'required',
                 'string',
                 'max:50',
-                Rule::unique('pelanggans', 'nomor_sambungan')->ignore($this->route('pelanggan')),
+                Rule::unique('pelanggan', 'nomor_sambungan')->ignore($this->route('pelanggan')),
             ],
             'no_telepon'      => ['nullable', 'string', 'max:20'],
             'is_active'       => ['boolean'],
