@@ -39,4 +39,22 @@ class Sla extends Model
     {
         return $this->batas_waktu;
     }
+
+    /**
+     * Accessor: apakah SLA sudah terlampaui (overdue)?
+     * Digunakan di view petugas untuk indikator visual.
+     */
+    public function getIsOverdueAttribute(): bool
+    {
+        return $this->status_sla === 'overdue';
+    }
+
+    /**
+     * Accessor: apakah SLA sudah terpenuhi?
+     * Digunakan di SlaService->cekDanUpdate().
+     */
+    public function getIsFulfilledAttribute(): bool
+    {
+        return $this->status_sla === 'terpenuhi';
+    }
 }
