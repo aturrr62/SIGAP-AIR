@@ -18,10 +18,10 @@ class StorePelangganRequest extends FormRequest
             'nama_pelanggan'  => ['required', 'string', 'max:255'],
             'alamat'          => ['required', 'string', 'max:1000'],
             'nomor_sambungan' => ['required', 'string', 'max:50', 'unique:pelanggan,nomor_sambungan'],
-            'no_telepon'      => ['required', 'string', 'max:20'],
-            'kategori_id'     => ['required', 'exists:kategori_pengaduan,id'],
-            'deskripsi'       => ['required', 'string', 'min:20', 'max:2000'],
-            'foto_bukti'      => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:10240'],
+
+            'no_telepon' => ['required', 'digits_between:8,15'],
+          
+           
             'is_active'       => ['boolean'],
         ];
     }
