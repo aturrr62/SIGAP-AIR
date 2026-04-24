@@ -94,6 +94,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/pengaduan/export-csv', [DaftarPengaduanController::class, 'exportCsv'])->name('pengaduan.export-csv');
         // PBI-01,02,03,09,16,17 routes here
         Route::resource('pelanggan', \App\Http\Controllers\Admin\PelangganController::class);
+        Route::resource('kategori', \App\Http\Controllers\Admin\KategoriController::class)
+            ->except(['show']);
     });
 
     // Shared: Admin & Supervisor
