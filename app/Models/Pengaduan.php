@@ -82,6 +82,11 @@ class Pengaduan extends Model
         return $this->hasOne(Sla::class);
     }
 
+    public function statusLogs()
+    {
+        return $this->hasMany(StatusLog::class)->latest();
+    }
+
     // ========================
     // SCOPES (Filter Query)
     // ========================
