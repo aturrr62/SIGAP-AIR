@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * Model Pengaduan — Core model sistem SIGAP-AIR
@@ -41,9 +42,11 @@ class Pengaduan extends Model
         'tanggal_pengajuan' => 'datetime',
     ];
 
-    protected $appends = [
-        'tanggal_pengajuan',
-    ];
+    // $appends DIHAPUS (FIX BUG-12):
+    // tanggal_pengajuan adalah kolom DB nyata, bukan computed attribute.
+    // Mendaftarkan kolom DB di $appends menyebabkan konflik dengan $casts:
+    // Laravel mencoba memanggil accessor DAN cast secara bersamaan -> hasil tidak terduga.
+    // $casts sudah cukup untuk serialize datetime ke JSON.
 
     // ========================
     // RELASI
@@ -80,6 +83,11 @@ class Pengaduan extends Model
         return $this->hasOne(Sla::class);
     }
 
+    public function statusLogs()
+    {
+        return $this->hasMany(StatusLog::class)->latest();
+    }
+
     // ========================
     // SCOPES (Filter Query)
     // ========================
@@ -110,8 +118,12 @@ class Pengaduan extends Model
      * Kompatibilitas lintas-PBI:
      * beberapa bagian app memakai tanggal_pengajuan, sementara migrasi hanya created_at.
      */
-    public function getTanggalPengajuanAttribute()
+    public function getTanggalPengajuanAttribute($value)
     {
-        return $this->attributes['tanggal_pengajuan'] ?? $this->created_at;
+        if (!empty($value)) {
+            return Carbon::parse($value);
+        }
+
+        return $this->created_at;
     }
 }
