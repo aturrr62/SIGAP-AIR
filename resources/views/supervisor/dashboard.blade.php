@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-supervisor-layout>
     <x-slot name="title">Dashboard Supervisor</x-slot>
 
     <div class="mx-auto w-full max-w-6xl">
@@ -164,4 +164,4 @@
         });
     </script>
     @endpush
-</x-app-layout>
+</x-app-supervisor-layout>
