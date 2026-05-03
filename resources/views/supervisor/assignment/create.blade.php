@@ -1,5 +1,5 @@
 {{-- PBI-06 Form Assignment Petugas --}}
-<x-app-layout>
+<x-app-supervisor-layout>
     <x-slot name="title">Tugaskan Petugas</x-slot>
 
     <div class="mb-4">
@@ -110,4 +110,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+</x-app-supervisor-layout>

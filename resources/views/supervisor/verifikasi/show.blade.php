@@ -1,5 +1,5 @@
 {{-- PBI-05 Detail Verifikasi --}}
-<x-app-layout>
+<x-app-supervisor-layout>
     <x-slot name="title">Detail Verifikasi #{{ $pengaduan->nomor_tiket }}</x-slot>
 
     <div class="mb-4">
@@ -120,4 +120,4 @@
         }
     </script>
     @endpush
-</x-app-layout>
+</x-app-supervisor-layout>

@@ -1,5 +1,5 @@
 {{-- PBI-18 Laporan Kinerja Petugas --}}
-<x-app-layout>
+<x-app-supervisor-layout>
     <x-slot name="title">Laporan Kinerja Petugas</x-slot>
 
     <div class="flex items-center justify-between mb-5">
@@ -78,4 +78,4 @@
             </tbody>
         </table>
     </div>
-</x-app-layout>
+</x-app-supervisor-layout>

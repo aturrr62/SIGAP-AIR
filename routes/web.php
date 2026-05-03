@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\SlaController as AdminSlaController;
+use App\Http\Controllers\Supervisor\MonitorSlaController;
 use App\Http\Controllers\Masyarakat\DashboardController as MasyarakatDashboardController;
 use App\Http\Controllers\Masyarakat\NotifikasiController;
 use App\Http\Controllers\Masyarakat\PengaduanController;
@@ -65,17 +67,39 @@ Route::middleware('auth')->group(function () {
 
     // Role: Supervisor
     Route::middleware(['role:supervisor'])->prefix('supervisor')->name('supervisor.')->group(function () {
-        Route::get('/dashboard', function () {
-            return view('dashboard');
-        })->name('dashboard');
-        // PBI-05,06,13,14,15,18 routes here
+        Route::get('/dashboard', [\App\Http\Controllers\Supervisor\DashboardController::class, 'index'])->name('dashboard');
+
+        // PBI-05: Verifikasi
+        Route::get('/verifikasi', [\App\Http\Controllers\Supervisor\VerifikasiController::class, 'index'])->name('verifikasi.index');
+        Route::get('/verifikasi/{pengaduan}', [\App\Http\Controllers\Supervisor\VerifikasiController::class, 'show'])->name('verifikasi.show');
+        Route::patch('/verifikasi/{pengaduan}', [\App\Http\Controllers\Supervisor\VerifikasiController::class, 'update'])->name('verifikasi.update');
+
+        // PBI-06: Assignment
+        Route::get('/assignment/create/{pengaduan}', [\App\Http\Controllers\Supervisor\AssignmentController::class, 'create'])->name('assignment.create');
+        Route::post('/assignment', [\App\Http\Controllers\Supervisor\AssignmentController::class, 'store'])->name('assignment.store');
+
+        // PBI-09: Monitor SLA & Alert Overdue
+        Route::get('/monitor-sla', [MonitorSlaController::class, 'index'])->name('monitor-sla.index');
+
+        // PBI-13,14,15,18 routes here
     });
 
     // Role: Admin
     Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
-        // PBI-01,02,03,09,16,17 routes here
+
+        // PBI-02: Kategori
+        Route::resource('kategori', \App\Http\Controllers\Admin\KategoriController::class);
+
+        // PBI-09: Konfigurasi SLA per Kategori
+        Route::get('/sla', [AdminSlaController::class, 'index'])->name('sla.index');
+        Route::get('/sla/{sla}/edit', [AdminSlaController::class, 'edit'])->name('sla.edit');
+        Route::patch('/sla/{sla}', [AdminSlaController::class, 'update'])->name('sla.update');
+
+        // PBI-01: Pelanggan
         Route::resource('pelanggan', \App\Http\Controllers\Admin\PelangganController::class);
+
+        // PBI-16,17 routes here
     });
 
     // Shared: Admin & Supervisor

@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-supervisor-layout>
     <x-slot name="title">Dashboard Supervisor</x-slot>
 
     {{-- KPI Cards --}}
@@ -109,4 +109,4 @@
         });
     </script>
     @endpush
-</x-app-layout>
+</x-app-supervisor-layout>

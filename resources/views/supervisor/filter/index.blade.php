@@ -1,5 +1,5 @@
 {{-- PBI-13 Filter & Pencarian Pengaduan --}}
-<x-app-layout>
+<x-app-supervisor-layout>
     <x-slot name="title">Filter Pengaduan</x-slot>
 
     <h1 class="text-2xl font-bold text-gray-800 mb-5">🔍 Filter Pengaduan</h1>
@@ -109,4 +109,4 @@
         </table>
         <div class="px-5 py-4 border-t">{{ $pengaduans->links() }}</div>
     </div>
-</x-app-layout>
+</x-app-supervisor-layout>
