@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\SlaController as AdminSlaController;
 use App\Http\Controllers\Admin\ZonaController;
 use App\Http\Controllers\Admin\DaftarPengaduanController;
 use App\Http\Controllers\Masyarakat\DashboardController as MasyarakatDashboardController;
@@ -10,10 +11,10 @@ use App\Http\Controllers\Masyarakat\RiwayatController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Supervisor\AssignmentController;
 use App\Http\Controllers\Supervisor\DashboardController as SupervisorDashboardController;
+use App\Http\Controllers\Supervisor\MonitorSlaController;
 use App\Http\Controllers\Admin\LaporanKinerjaController;
 use App\Http\Controllers\Supervisor\FilterPengaduanController;
 use App\Http\Controllers\Supervisor\KinerjaPetugasController;
-use App\Http\Controllers\Supervisor\FilterPengaduanController;
 use App\Http\Controllers\Supervisor\LaporanController;
 use App\Http\Controllers\Supervisor\VerifikasiController;
 use Illuminate\Support\Facades\Route;
@@ -91,6 +92,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/laporan/export-pdf', [LaporanController::class, 'exportPdf'])->name('laporan.export-pdf');
         Route::get('/kinerja', [KinerjaPetugasController::class, 'index'])->name('kinerja.index');
         Route::get('/kinerja/export-excel', [KinerjaPetugasController::class, 'exportExcel'])->name('kinerja.export-excel');
+
+        // PBI-09: Monitor SLA & Alert Overdue
+        Route::get('/monitor-sla', [MonitorSlaController::class, 'index'])->name('monitor-sla.index');
     });
 
     // Role: Admin
@@ -100,7 +104,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/pengaduan/export-csv', [DaftarPengaduanController::class, 'exportCsv'])->name('pengaduan.export-csv');
         Route::get('/kinerja', [LaporanKinerjaController::class, 'index'])->name('kinerja.index');
         Route::get('/kinerja/export-excel', [LaporanKinerjaController::class, 'exportExcel'])->name('kinerja.export-excel');
-        // PBI-01,02,03,09,16,17 routes here
+        // PBI-09: Konfigurasi SLA per Kategori
+        Route::get('/sla', [AdminSlaController::class, 'index'])->name('sla.index');
+        Route::get('/sla/{sla}/edit', [AdminSlaController::class, 'edit'])->name('sla.edit');
+        Route::patch('/sla/{sla}', [AdminSlaController::class, 'update'])->name('sla.update');
         Route::resource('pelanggan', \App\Http\Controllers\Admin\PelangganController::class);
         Route::resource('kategori', \App\Http\Controllers\Admin\KategoriController::class)
             ->except(['show']);
