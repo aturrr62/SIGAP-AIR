@@ -15,6 +15,7 @@ class UserFactory extends Factory
     {
         return [
             'name'              => $this->faker->name(),
+
             'username'          => 'user_' . str_replace('.', '_', uniqid('', true)),
             'email'             => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
@@ -24,6 +25,7 @@ class UserFactory extends Factory
             'is_active'         => true,
             'remember_token'    => Str::random(10),
         ];
+
     }
 
     public function unverified(): static

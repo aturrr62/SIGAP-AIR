@@ -5,12 +5,15 @@ namespace Tests;
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
+use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Collection;
 use Laravel\Dusk\TestCase as BaseTestCase;
 use PHPUnit\Framework\Attributes\BeforeClass;
 
 abstract class DuskTestCase extends BaseTestCase
 {
+    use CreatesApplication;
+
     /**
      * Creates the application instance for Dusk / PHPUnit.
      */
@@ -34,9 +37,19 @@ abstract class DuskTestCase extends BaseTestCase
      *   DUSK_START_CHROMEDRIVER=false — jangan jalankan driver bawaan Dusk; jalankan
      *       chromedriver yang cocok sendiri di port 9515 (atau set DUSK_DRIVER_URL).
      */
+    public function createApplication()
+    {
+        $app = require __DIR__ . '/../bootstrap/app.php';
+
+        $app->make(Kernel::class)->bootstrap();
+
+        return $app;
+    }
+
     #[BeforeClass]
     public static function prepare(): void
     {
+
         if (static::runningInSail()) {
             return;
         }
@@ -58,15 +71,11 @@ abstract class DuskTestCase extends BaseTestCase
         static::startChromeDriver(['--port=9515']);
     }
 
-    /**
-     * Create the RemoteWebDriver instance.
-     */
     protected function driver(): RemoteWebDriver
     {
         $options = (new ChromeOptions)->addArguments(collect([
-            $this->shouldStartMaximized() ? '--start-maximized' : '--window-size=1920,1080',
+            '--window-size=1920,1080',
             '--disable-search-engine-choice-screen',
-            '--disable-smooth-scrolling',
         ])->unless($this->hasHeadlessDisabled(), function (Collection $items) {
             return $items->merge([
                 '--disable-gpu',
@@ -77,7 +86,8 @@ abstract class DuskTestCase extends BaseTestCase
         return RemoteWebDriver::create(
             $_ENV['DUSK_DRIVER_URL'] ?? env('DUSK_DRIVER_URL') ?? 'http://localhost:9515',
             DesiredCapabilities::chrome()->setCapability(
-                ChromeOptions::CAPABILITY, $options
+                ChromeOptions::CAPABILITY,
+                $options
             )
         );
     }
