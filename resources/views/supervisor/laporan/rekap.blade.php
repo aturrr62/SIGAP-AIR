@@ -1,5 +1,5 @@
 {{-- PBI-14 Laporan Rekap Pengaduan --}}
-<x-app-layout>
+<x-app-supervisor-layout>
     <x-slot name="title">Laporan Rekap Pengaduan</x-slot>
 
     <div class="mb-4">
@@ -106,4 +106,4 @@
             </tbody>
         </table>
     </div>
-</x-app-layout>
+</x-app-supervisor-layout>
