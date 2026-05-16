@@ -181,7 +181,7 @@
                         <span>Manajemen User</span>
                     </a>
 
-                    <a href="#" :class="isactive('/admin/petugas') ? 'bg-white/15 text-white shadow-lg' : 'text-blue-100 hover:bg-white/10 hover:text-white'" class="flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all duration-200">
+                    <a href="{{ route('admin.petugas.index') }}" :class="isactive('/admin/petugas') ? 'bg-white/15 text-white shadow-lg' : 'text-blue-100 hover:bg-white/10 hover:text-white'" class="flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all duration-200">
                         <span class="material-symbols-outlined text-xl">engineering</span>
                         <span>Data Petugas</span>
                     </a>

@@ -6,19 +6,44 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\{User, Petugas, Zona};
+use App\Models\{User, Petugas, Zona, ZonaWilayah};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{DB, Hash};
 
 class PetugasController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $petugas = Petugas::with(['user', 'zonas'])
-            ->latest()
-            ->paginate(15);
+        // Ambil semua zona aktif untuk dropdown filter
+        $zonas = ZonaWilayah::where('is_active', true)->orderBy('nama_zona')->get();
 
-        return view('admin.petugas.index', compact('petugas'));
+        // Query petugas dengan filter
+        $query = Petugas::with(['user', 'zona'])
+            ->join('users', 'petugas.user_id', '=', 'users.id')
+            ->select('petugas.*');
+
+        // Filter: Zona Wilayah
+        if ($request->filled('zona_id')) {
+            $query->where('petugas.zona_id', $request->zona_id);
+        }
+
+        // Filter: Status Ketersediaan
+        if ($request->filled('status')) {
+            $query->where('petugas.status_tersedia', $request->status);
+        }
+
+        // Filter: Pencarian nama / nip
+        if ($request->filled('search')) {
+            $search = '%' . $request->search . '%';
+            $query->where(function ($q) use ($search) {
+                $q->where('users.name', 'like', $search)
+                  ->orWhere('petugas.nip', 'like', $search);
+            });
+        }
+
+        $petugas = $query->orderBy('users.name')->paginate(15)->withQueryString();
+
+        return view('admin.petugas.index', compact('petugas', 'zonas'));
     }
 
     public function create()

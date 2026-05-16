@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\PetugasController;
 use App\Http\Controllers\Admin\SlaController as AdminSlaController;
 use App\Http\Controllers\Admin\ZonaController;
 use App\Http\Controllers\Admin\DaftarPengaduanController;
@@ -118,6 +119,9 @@ Route::middleware('auth')->group(function () {
         Route::resource('pelanggan', \App\Http\Controllers\Admin\PelangganController::class);
         Route::resource('kategori', \App\Http\Controllers\Admin\KategoriController::class)
             ->except(['show']);
+
+        // PBI-17 — Manajemen Petugas Teknis
+        Route::resource('petugas', PetugasController::class)->except(['show']);
 
         // PBI-03 — Zona Wilayah & Pemetaan Petugas
         Route::get('zona',                              [ZonaController::class, 'index'])->name('zona.index');
